@@ -3,6 +3,8 @@ package com.example.myapplicationtext;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -23,11 +25,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvTextSizeValue;
     private TextView tvLineHeightValue;
     private TextView tvExtraLineSpacingValue;
-    // 新增：字体内边距状态展示控件
     private TextView tvFontPaddingStatus;
+    private EditText inputEditText;
     private float density;
     private float scaledDensity;
-    // 记录 includeFontPadding 状态
     private boolean isFontPaddingEnabled = false;
 
     @Override
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void bindViews() {
         textView = findViewById(R.id.textView);
+        inputEditText = findViewById(R.id.inputEditText);
         tvTextSize = findViewById(R.id.tvTextSize);
         tvMeasuredHeight = findViewById(R.id.tvMeasuredHeight);
         tvActualHeight = findViewById(R.id.tvActualHeight);
@@ -67,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         tvTextSizeValue = findViewById(R.id.tvTextSizeValue);
         tvLineHeightValue = findViewById(R.id.tvLineHeightValue);
         tvExtraLineSpacingValue = findViewById(R.id.tvExtraLineSpacingValue);
-        // 绑定新增的字体内边距状态展示控件
         tvFontPaddingStatus = findViewById(R.id.tvFontPaddingStatus);
     }
 
@@ -139,18 +140,22 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // 新增：includeFontPadding 控制监听器
+        // includeFontPadding 控制监听器
         RadioGroup rgFontPadding = findViewById(R.id.rgFontPadding);
         rgFontPadding.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rbPaddingOn) {
-                isFontPaddingEnabled = true;
-                textView.setIncludeFontPadding(true);
-            } else {
-                isFontPaddingEnabled = false;
-                textView.setIncludeFontPadding(false);
-            }
-            // 更新展示状态
+            isFontPaddingEnabled = checkedId == R.id.rbPaddingOn;
+            textView.setIncludeFontPadding(isFontPaddingEnabled);
             tvFontPaddingStatus.setText("字体内边距（includeFontPadding）：" + isFontPaddingEnabled);
+            updateTextMeasurements();
+        });
+
+        // 应用按钮点击事件 - 更新文本内容
+        Button btnApply = findViewById(R.id.btnApply);
+        btnApply.setOnClickListener(v -> {
+            String inputText = inputEditText.getText().toString().trim();
+            if (!inputText.isEmpty()) {
+                textView.setText(inputText);
+            }
             updateTextMeasurements();
         });
 
@@ -184,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
             tvMeasuredHeight.setText("测量高度（dp）：" + measuredHeightDp);
             tvActualHeight.setText("实际高度（dp）：" + actualHeightDp);
             tvTotalHeight.setText("总高度（含内边距，dp）：" + totalHeightDp);
-            // 确保 includeFontPadding 状态展示同步
             tvFontPaddingStatus.setText("字体内边距（includeFontPadding）：" + isFontPaddingEnabled);
         });
     }
