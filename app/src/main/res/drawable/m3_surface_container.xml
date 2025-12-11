@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="?attr/colorSurface" /> <!-- 引用主题容器色 -->
+    <corners android:radius="12dp" /> <!-- M3推荐圆角 -->
+    <stroke
+        android:width="0.5dp"
+        android:color="?attr/colorOnSurfaceVariant"
+        android:alpha="0.1" /> <!--  subtle边框 -->
+</shape>

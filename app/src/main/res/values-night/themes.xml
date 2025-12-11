@@ -1,7 +1,25 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MyApplicationText" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <!-- 基础应用主题（M3 深色模式） -->
+    <style name="Base.Theme.MyApplicationText" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- 主色调配置 -->
+        <item name="colorPrimary">@color/m3_primary</item>
+        <item name="colorPrimaryVariant">@color/m3_primary_variant</item>
+        <item name="colorSecondary">@color/m3_secondary</item>
+
+        <!-- 背景与容器色 -->
+        <item name="android:colorBackground">@color/m3_background</item>
+        <item name="colorSurface">@color/m3_surface</item>
+
+        <!-- 文本色（与背景对比度符合M3规范） -->
+        <item name="colorOnPrimary">@color/m3_on_primary</item>
+        <item name="colorOnBackground">@color/m3_on_background</item>
+        <item name="colorOnSurface">@color/m3_on_surface</item>
+
+        <!-- 错误色 -->
+        <item name="colorError">@color/m3_error</item>
+        <item name="colorOnError">@color/m3_on_error</item>
+
+        <!-- 启用M3动态颜色（可选，增强深色体验） -->
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">true</item>
     </style>
 </resources>

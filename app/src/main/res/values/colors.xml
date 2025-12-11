@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 基础黑白色 -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- M3 深色主题核心色 -->
+    <color name="m3_primary">#BB86FC</color> <!-- 紫色作为主色（符合M3深色推荐） -->
+    <color name="m3_primary_variant">#3700B3</color>
+    <color name="m3_secondary">#03DAC6</color> <!-- 青色作为辅助色 -->
+    <color name="m3_background">#121212</color> <!-- 深黑背景 -->
+    <color name="m3_surface">#1E1E1E</color> <!-- 卡片/容器背景 -->
+    <color name="m3_error">#CF6679</color> <!-- 错误色 -->
+    <color name="m3_on_primary">#000000</color> <!-- 主色上的文本 -->
+    <color name="m3_on_background">#E0E0E0</color> <!-- 背景上的文本 -->
+    <color name="m3_on_surface">#E0E0E0</color> <!-- 容器上的文本 -->
+    <color name="m3_on_error">#000000</color> <!-- 错误色上的文本 -->
 </resources>

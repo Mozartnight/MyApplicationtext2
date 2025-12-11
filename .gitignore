@@ -1,15 +1,46 @@
+# 构建输出目录
+/build/
+/app/build/
+/captures/
+
+# Gradle相关
+.gradle/
+gradle/
+!gradle/wrapper/gradle-wrapper.jar
+gradlew
+gradlew.bat
+
+#  IDEA/Android Studio配置文件
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+.idea/
+!.idea/vcs.xml
+!.idea/deploymentTargetSelector.xml
+!.idea/misc.xml
+!.idea/compiler.xml
+!.idea/gradle.xml
+!.idea/runConfigurations.xml
+!.idea/AndroidProjectSystem.xml
+!.idea/modules.xml
+!.idea/workspace.xml
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+Thumbs.db
+
+# 本地配置文件
 local.properties
+/.externalNativeBuild/
+.cxx/
+
+# 签名文件
+*.jks
+*.keystore
+*.p12
+
+# 日志和临时文件
+*.log
+*.tmp
+*.bak
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local

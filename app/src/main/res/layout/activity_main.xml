@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="?attr/colorBackground"
     tools:context=".MainActivity">
 
     <!-- 输入区域 -->
@@ -15,6 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:background="@drawable/m3_surface_container"
+        android:padding="2dp"
+        app:boxBackgroundColor="?attr/colorSurface"
+        app:hintTextColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,16 +32,18 @@
             android:inputType="textMultiLine|textCapSentences"
             android:lines="5"
             android:minHeight="120dp"
-            android:padding="12dp"/>
+            android:padding="12dp"
+            android:textColor="?attr/colorOnSurface" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 红色分隔条1 -->
+    <!-- 主色分隔条1 -->
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="16dp"
         android:layout_marginBottom="16dp"
-        android:background="#ff0000"
+        android:backgroundTint="?attr/colorPrimary"
+        android:radius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputLayout" />
@@ -47,20 +54,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/m3_surface_container"
+        android:padding="16dp"
         android:includeFontPadding="false"
         android:text="Hello World!"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
-    <!-- 红色分隔条2 -->
+    <!-- 辅助色分隔条2 -->
     <View
         android:id="@+id/redBox2"
         android:layout_width="match_parent"
         android:layout_height="16dp"
         android:layout_marginBottom="24dp"
-        android:background="#ff0000"
+        android:backgroundTint="?attr/colorSecondary"
+        android:radius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -81,17 +92,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:text="启用内边距" />
+            android:text="启用内边距"
+            android:textColor="?attr/colorOnSurface" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/rbPaddingOff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="禁用内边距" />
+            android:text="禁用内边距"
+            android:textColor="?attr/colorOnSurface" />
     </RadioGroup>
 
-    <!-- 滚动控制区（添加id解决约束问题） -->
+    <!-- 滚动控制区 -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -124,6 +137,7 @@
                     android:layout_marginEnd="16dp"
                     android:minWidth="100dp"
                     android:text="字号（sp）: "
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -133,7 +147,8 @@
                     android:hint="12"
                     android:inputType="numberDecimal"
                     android:text="12"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <SeekBar
                     android:id="@+id/sbTextSize"
@@ -142,10 +157,11 @@
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:max="72"
-                    android:progress="12"/>
+                    android:progress="12"
+                    android:thumbTint="?attr/colorPrimary" />
             </LinearLayout>
 
-            <!-- 字重设置（使用Spinner） -->
+            <!-- 字重设置 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -159,13 +175,16 @@
                     android:layout_marginEnd="16dp"
                     android:minWidth="100dp"
                     android:text="字重: "
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
 
                 <Spinner
                     android:id="@+id/fontWeightSpinner"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:entries="@array/font_weights"/>
+                    android:entries="@array/font_weights"
+                    android:popupBackground="?attr/colorSurface"
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
             <!-- 行间距倍数设置 -->
@@ -182,6 +201,7 @@
                     android:layout_marginEnd="16dp"
                     android:minWidth="100dp"
                     android:text="行间距倍数: "
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -191,7 +211,8 @@
                     android:hint="1.0"
                     android:inputType="numberDecimal"
                     android:text="1.0"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <SeekBar
                     android:id="@+id/sbLineHeightMultiplier"
@@ -200,7 +221,8 @@
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:max="30"
-                    android:progress="10"/>
+                    android:progress="10"
+                    android:thumbTint="?attr/colorPrimary" />
             </LinearLayout>
 
             <!-- 额外行间距设置 -->
@@ -218,6 +240,7 @@
                     android:layout_marginEnd="16dp"
                     android:minWidth="100dp"
                     android:text="额外行间距（dp）: "
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -227,7 +250,8 @@
                     android:hint="0"
                     android:inputType="numberDecimal"
                     android:text="0"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <SeekBar
                     android:id="@+id/sbExtraLineSpacing"
@@ -235,7 +259,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:max="50"/>
+                    android:max="50"
+                    android:thumbTint="?attr/colorPrimary" />
             </LinearLayout>
 
             <!-- 应用按钮 -->
@@ -245,7 +270,9 @@
                 android:layout_height="48dp"
                 android:layout_gravity="end"
                 android:minWidth="120dp"
-                android:text="应用设置"/>
+                android:text="应用设置"
+                android:textColor="?attr/colorOnPrimary"
+                android:backgroundTint="?attr/colorPrimary" />
         </LinearLayout>
     </ScrollView>
 
@@ -254,8 +281,8 @@
         android:id="@+id/resultContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f5f5f5"
-        android:elevation="2dp"
+        android:background="@drawable/m3_surface_container"
+        android:elevation="4dp"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -268,6 +295,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:text="文本测量结果"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"/>
 
@@ -277,6 +305,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="当前字号（sp）："
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -285,6 +314,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="测量高度（dp）："
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -293,6 +323,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="实际高度（dp）："
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -301,6 +332,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="总高度（含内边距，dp）："
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -309,6 +341,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="布局完成后高度（dp）："
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -316,7 +349,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="字体内边距（includeFontPadding）：false"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

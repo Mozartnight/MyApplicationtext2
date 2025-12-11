@@ -1,8 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.MyApplicationText" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.MyApplicationText" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- 与夜间模式保持一致，强制全局黑色调 -->
+        <item name="colorPrimary">@color/m3_primary</item>
+        <item name="colorPrimaryVariant">@color/m3_primary_variant</item>
+        <item name="colorSecondary">@color/m3_secondary</item>
+        <item name="android:colorBackground">@color/m3_background</item>
+        <item name="colorSurface">@color/m3_surface</item>
+        <item name="colorOnPrimary">@color/m3_on_primary</item>
+        <item name="colorOnBackground">@color/m3_on_background</item>
+        <item name="colorOnSurface">@color/m3_on_surface</item>
+        <item name="colorError">@color/m3_error</item>
+        <item name="colorOnError">@color/m3_on_error</item>
     </style>
 
     <style name="Theme.MyApplicationText" parent="Base.Theme.MyApplicationText" />

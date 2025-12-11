@@ -2,9 +2,10 @@ package com.example.myapplicationtext;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,7 +75,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListeners() {
-        // 字号调整监听器
+        // 文本输入实时同步
+        TextInputEditText inputEditText = findViewById(R.id.inputEditText);
+        inputEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                textView.setText(s.toString());
+                updateTextMeasurements();
+            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
+
+        // 字号调整监听器（SeekBar）
         SeekBar sbTextSize = findViewById(R.id.sbTextSize);
         sbTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -81,6 +95,11 @@ public class MainActivity extends AppCompatActivity {
                 if (progress < 8) progress = 8; // 最小字号限制
                 float newSize = progress;
                 textView.setTextSize(newSize); // 默认为sp单位
+                // 同步更新输入框
+                EditText etTextSize = findViewById(R.id.etTextSize);
+                etTextSize.removeTextChangedListener((TextWatcher) etTextSize.getTag());
+                etTextSize.setText(String.valueOf(newSize));
+                etTextSize.setTag(null);
                 updateTextMeasurements();
             }
 
@@ -91,7 +110,31 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // 字重控制监听器（修正核心：使用Spinner选中位置作为索引）
+        // 字号输入框实时更新
+        EditText etTextSize = findViewById(R.id.etTextSize);
+        TextWatcher textSizeWatcher = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    float textSize = Float.parseFloat(s.toString());
+                    if (textSize >= 8) { // 最小限制
+                        textView.setTextSize(textSize);
+                        // 同步更新SeekBar
+                        SeekBar sbTextSize = findViewById(R.id.sbTextSize);
+                        sbTextSize.setProgress((int) textSize);
+                        updateTextMeasurements();
+                    }
+                } catch (NumberFormatException e) {
+                    // 输入无效时忽略
+                }
+            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        };
+        etTextSize.addTextChangedListener(textSizeWatcher);
+        etTextSize.setTag(textSizeWatcher);
+
+        // 字重控制监听器
         Spinner fontWeightSpinner = findViewById(R.id.fontWeightSpinner);
         fontWeightSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -99,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 // 确保索引在数组范围内（0-3）
                 if (position >= 0 && position < fontWeights.length) {
                     int selectedWeight = fontWeights[position];
-                    // 使用正确的方式设置字重（避免Typeface.style参数错误）
                     Typeface typeface = Typeface.create(null, selectedWeight, false);
                     textView.setTypeface(typeface);
                     updateTextMeasurements();
@@ -110,13 +152,18 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        // 行高倍数控制监听器
+        // 行高倍数控制监听器（SeekBar）
         SeekBar sbLineHeight = findViewById(R.id.sbLineHeightMultiplier);
         sbLineHeight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float multiplier = progress / 10f; // 0.0-3.0倍
                 textView.setLineSpacing(textView.getLineSpacingExtra(), multiplier);
+                // 同步更新输入框
+                EditText etLineMultiplier = findViewById(R.id.etLineMultiplier);
+                etLineMultiplier.removeTextChangedListener((TextWatcher) etLineMultiplier.getTag());
+                etLineMultiplier.setText(String.valueOf(multiplier));
+                etLineMultiplier.setTag(null);
                 updateTextMeasurements();
             }
 
@@ -127,7 +174,29 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // 额外行间距距控制监听器
+        // 行高倍数输入框实时更新
+        EditText etLineMultiplier = findViewById(R.id.etLineMultiplier);
+        TextWatcher lineMultiplierWatcher = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    float multiplier = Float.parseFloat(s.toString());
+                    textView.setLineSpacing(textView.getLineSpacingExtra(), multiplier);
+                    // 同步更新SeekBar
+                    SeekBar sbLineHeight = findViewById(R.id.sbLineHeightMultiplier);
+                    sbLineHeight.setProgress((int) (multiplier * 10));
+                    updateTextMeasurements();
+                } catch (NumberFormatException e) {
+                    // 输入无效时忽略
+                }
+            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        };
+        etLineMultiplier.addTextChangedListener(lineMultiplierWatcher);
+        etLineMultiplier.setTag(lineMultiplierWatcher);
+
+        // 额外行间距控制监听器（SeekBar）
         SeekBar sbExtraSpacing = findViewById(R.id.sbExtraLineSpacing);
         sbExtraSpacing.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -135,6 +204,11 @@ public class MainActivity extends AppCompatActivity {
                 float extraSpacingDp = progress;
                 float extraSpacingPx = extraSpacingDp * density; // 转换为px
                 textView.setLineSpacing(extraSpacingPx, textView.getLineSpacingMultiplier());
+                // 同步更新输入框
+                EditText etExtraSpacing = findViewById(R.id.etExtraSpacing);
+                etExtraSpacing.removeTextChangedListener((TextWatcher) etExtraSpacing.getTag());
+                etExtraSpacing.setText(String.valueOf(extraSpacingDp));
+                etExtraSpacing.setTag(null);
                 updateTextMeasurements();
             }
 
@@ -144,6 +218,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+
+        // 额外行间距输入框实时更新
+        EditText etExtraSpacing = findViewById(R.id.etExtraSpacing);
+        TextWatcher extraSpacingWatcher = new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    float extraSpacingDp = Float.parseFloat(s.toString());
+                    float extraSpacingPx = extraSpacingDp * density;
+                    textView.setLineSpacing(extraSpacingPx, textView.getLineSpacingMultiplier());
+                    // 同步更新SeekBar
+                    SeekBar sbExtraSpacing = findViewById(R.id.sbExtraLineSpacing);
+                    sbExtraSpacing.setProgress((int) extraSpacingDp);
+                    updateTextMeasurements();
+                } catch (NumberFormatException e) {
+                    // 输入无效时忽略
+                }
+            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        };
+        etExtraSpacing.addTextChangedListener(extraSpacingWatcher);
+        etExtraSpacing.setTag(extraSpacingWatcher);
 
         // includeFontPadding 控制监听器
         RadioGroup rgFontPadding = findViewById(R.id.rgFontPadding);
@@ -165,45 +262,6 @@ public class MainActivity extends AppCompatActivity {
             float heightDp = pxToDp(heightPx);
             tvLayoutHeight.setText("布局完成后高度（dp）：" + heightDp);
         });
-
-        // 应用按钮点击事件（处理输入框设置）
-        Button btnApply = findViewById(R.id.btnApply);
-        btnApply.setOnClickListener(v -> applyTextSettings());
-    }
-
-    // 处理输入框中的文本设置（字号、行高、额外行间距）
-    private void applyTextSettings() {
-        // 处理字号输入
-        EditText etTextSize = findViewById(R.id.etTextSize);
-        try {
-            float textSize = Float.parseFloat(etTextSize.getText().toString());
-            if (textSize >= 8) { // 最小限制
-                textView.setTextSize(textSize);
-            }
-        } catch (NumberFormatException e) {
-            // 输入无效时忽略
-        }
-
-        // 处理行高倍数输入
-        EditText etLineMultiplier = findViewById(R.id.etLineMultiplier);
-        try {
-            float multiplier = Float.parseFloat(etLineMultiplier.getText().toString());
-            textView.setLineSpacing(textView.getLineSpacingExtra(), multiplier);
-        } catch (NumberFormatException e) {
-            // 输入无效时忽略
-        }
-
-        // 处理额外行间距输入
-        EditText etExtraSpacing = findViewById(R.id.etExtraSpacing);
-        try {
-            float extraSpacingDp = Float.parseFloat(etExtraSpacing.getText().toString());
-            float extraSpacingPx = extraSpacingDp * density;
-            textView.setLineSpacing(extraSpacingPx, textView.getLineSpacingMultiplier());
-        } catch (NumberFormatException e) {
-            // 输入无效时忽略
-        }
-
-        updateTextMeasurements();
     }
 
     // 更新文本测量数据并展示
