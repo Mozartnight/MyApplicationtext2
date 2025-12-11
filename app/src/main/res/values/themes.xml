@@ -11,6 +11,30 @@
         <item name="colorOnSurface">@color/m3_on_surface</item>
         <item name="colorError">@color/m3_error</item>
         <item name="colorOnError">@color/m3_on_error</item>
+
+        <!-- 状态栏配置：与主色调一致 -->
+        <item name="android:statusBarColor">@color/m3_primary</item>
+        <!-- 允许状态栏文字颜色适配（深色主题下用白色文字） -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+
+        <!-- 导航栏配置：与表面色一致 -->
+        <item name="android:navigationBarColor">@color/m3_surface</item>
+        <!-- 导航栏图标浅色模式（配合深色背景） -->
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+
+        <!-- 窗口背景：与全局背景色统一 -->
+        <item name="android:windowBackground">@color/m3_background</item>
+
+        <!-- 默认字体配置 -->
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
+
+        <!-- 默认文本颜色（确保文本与背景对比度） -->
+        <item name="android:textColorPrimary">@color/m3_on_background</item>
+        <item name="android:textColorSecondary">@color/m3_on_surface</item>
+
+        <!-- 按钮样式默认配置 -->
+        <item name="materialButtonStyle">@style/Widget.Material3.Button</item>
     </style>
 
     <style name="Theme.MyApplicationText" parent="Base.Theme.MyApplicationText" />

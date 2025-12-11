@@ -9,17 +9,68 @@
         <!-- 背景与容器色 -->
         <item name="android:colorBackground">@color/m3_background</item>
         <item name="colorSurface">@color/m3_surface</item>
+        <item name="colorSurfaceVariant">@color/m3_surface_variant</item> <!-- 新增：表面变体色（用于卡片等） -->
 
         <!-- 文本色（与背景对比度符合M3规范） -->
         <item name="colorOnPrimary">@color/m3_on_primary</item>
         <item name="colorOnBackground">@color/m3_on_background</item>
         <item name="colorOnSurface">@color/m3_on_surface</item>
+        <item name="colorOnSurfaceVariant">@color/m3_on_surface_variant</item> <!-- 新增：表面变体上的文本色 -->
 
         <!-- 错误色 -->
         <item name="colorError">@color/m3_error</item>
         <item name="colorOnError">@color/m3_on_error</item>
 
-        <!-- 启用M3动态颜色（可选，增强深色体验） -->
+        <!-- 状态栏与导航栏配置 -->
+        <item name="android:statusBarColor">@color/m3_primary</item> <!-- 状态栏与主色调一致 -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item> <!-- 深色状态栏用白色文字 -->
+        <item name="android:navigationBarColor">@color/m3_surface</item> <!-- 导航栏与表面色一致 -->
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item> <!-- 深色导航栏用白色图标 -->
+
+        <!-- 窗口背景（与全局背景统一，避免过渡闪烁） -->
+        <item name="android:windowBackground">@color/m3_background</item>
+
+        <!-- 全局文本样式统一 -->
+        <item name="android:fontFamily">sans-serif</item> <!-- 默认无衬线字体 -->
+        <item name="fontFamily">sans-serif</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.MyApplication.BodyLarge</item> <!-- 关联自定义文本样式 -->
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.MyApplication.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.MyApplication.BodySmall</item>
+
+        <!-- 输入框样式（适配布局中的TextInputLayout） -->
+        <item name="textInputStyle">@style/Widget.MyApplication.TextInputLayout</item>
+
+        <!-- 按钮样式 -->
+        <item name="materialButtonStyle">@style/Widget.MyApplication.Button</item>
+
+        <!-- 启用M3动态颜色与对比度增强 -->
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">true</item>
+        <item name="dynamicColor">true</item> <!-- 启用动态颜色（Android 12+） -->
+    </style>
+
+    <!-- 自定义文本样式（继承M3基础样式并微调） -->
+    <style name="TextAppearance.MyApplication.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/m3_on_background</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="TextAppearance.MyApplication.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/m3_on_background</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="TextAppearance.MyApplication.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/m3_on_surface_variant</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- 输入框样式（适配深色模式） -->
+    <style name="Widget.MyApplication.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/m3_primary</item> <!-- 边框色使用主色调 -->
+        <item name="hintTextColor">@color/m3_on_surface_variant</item> <!-- 提示文字色 -->
+    </style>
+
+    <!-- 按钮样式 -->
+    <style name="Widget.MyApplication.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/m3_primary</item>
+        <item name="android:textColor">@color/m3_on_primary</item>
     </style>
 </resources>

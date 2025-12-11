@@ -5,5 +5,5 @@
     <stroke
         android:width="0.5dp"
         android:color="?attr/colorOnSurfaceVariant"
-        android:alpha="0.1" /> <!--  subtle边框 -->
+        android:alpha="0.1" />
 </shape>
