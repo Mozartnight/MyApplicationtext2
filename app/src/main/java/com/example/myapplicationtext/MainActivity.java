@@ -2,17 +2,21 @@ package com.example.myapplicationtext;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,14 +26,21 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvActualHeight;
     private TextView tvTotalHeight;
     private TextView tvLayoutHeight;
-    private TextView tvTextSizeValue;
-    private TextView tvLineHeightValue;
-    private TextView tvExtraLineSpacingValue;
     private TextView tvFontPaddingStatus;
-    private EditText inputEditText;
+    // 新增：数值显示TextView
+    private TextView tvTextSizeValue;
+    private TextView tvLineMultiplierValue;
+    private TextView tvExtraSpacingValue;
+
     private float density;
     private float scaledDensity;
     private boolean isFontPaddingEnabled = false;
+    // 字重数组（从资源文件加载）
+    private int[] fontWeights;
+
+    // 启用控制CheckBox
+    private CheckBox cbEnableLineHeight;
+    private CheckBox cbEnableExtraSpacing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         // 处理系统窗口Insets
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // 强制将布局的 padding 设置为系统状态栏/导航栏的间距
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
@@ -48,8 +60,17 @@ public class MainActivity extends AppCompatActivity {
         density = getResources().getDisplayMetrics().density;
         scaledDensity = getResources().getDisplayMetrics().scaledDensity;
 
+        // 加载字重数组（长度为4，索引0-3）
+        fontWeights = getResources().getIntArray(R.array.font_weight_values);
+
         // 绑定控件
         bindViews();
+
+        // 初始化CheckBox控制的控件状态
+        initCheckBoxControl();
+
+        // 初始化数值显示
+        initValueDisplay();
 
         // 初始化监听器
         initListeners();
@@ -59,29 +80,101 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
+        // 核心展示控件
         textView = findViewById(R.id.textView);
-        inputEditText = findViewById(R.id.inputEditText);
         tvTextSize = findViewById(R.id.tvTextSize);
         tvMeasuredHeight = findViewById(R.id.tvMeasuredHeight);
         tvActualHeight = findViewById(R.id.tvActualHeight);
         tvTotalHeight = findViewById(R.id.tvTotalHeight);
         tvLayoutHeight = findViewById(R.id.tvLayoutHeight);
-        tvTextSizeValue = findViewById(R.id.tvTextSizeValue);
-        tvLineHeightValue = findViewById(R.id.tvLineHeightValue);
-        tvExtraLineSpacingValue = findViewById(R.id.tvExtraLineSpacingValue);
         tvFontPaddingStatus = findViewById(R.id.tvFontPaddingStatus);
+
+        // 新增：绑定数值显示TextView
+        tvTextSizeValue = findViewById(R.id.tvTextSizeValue);
+        tvLineMultiplierValue = findViewById(R.id.tvLineMultiplierValue);
+        tvExtraSpacingValue = findViewById(R.id.tvExtraSpacingValue);
+
+        // 启用控制CheckBox
+        cbEnableLineHeight = findViewById(R.id.cbEnableLineHeight);
+        cbEnableExtraSpacing = findViewById(R.id.cbEnableExtraSpacing);
+    }
+
+    // 初始化CheckBox对应的控件启用状态
+    private void initCheckBoxControl() {
+        SeekBar sbLineHeight = findViewById(R.id.sbLineHeightMultiplier);
+        SeekBar sbExtraSpacing = findViewById(R.id.sbExtraLineSpacing);
+
+        // 根据CheckBox默认状态（true）设置控件启用
+        sbLineHeight.setEnabled(cbEnableLineHeight.isChecked());
+        sbExtraSpacing.setEnabled(cbEnableExtraSpacing.isChecked());
+    }
+
+    // 新增：初始化数值显示
+    private void initValueDisplay() {
+        // 字号初始值
+        tvTextSizeValue.setText("12");
+        // 行间距倍数初始值
+        tvLineMultiplierValue.setText("1.0");
+        // 额外行间距初始值
+        tvExtraSpacingValue.setText("0");
     }
 
     private void initListeners() {
-        // 字号调整监听器
+        // ========== CheckBox启用控制监听 ==========
+        // 行间距倍数启用/禁用
+        cbEnableLineHeight.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SeekBar sbLineHeight = findViewById(R.id.sbLineHeightMultiplier);
+
+            // 启用/禁用控件
+            sbLineHeight.setEnabled(isChecked);
+
+            // 未启用时恢复默认值（1.0倍行间距）
+            if (!isChecked) {
+                sbLineHeight.setProgress(10); // 10 → 1.0倍
+                tvLineMultiplierValue.setText("1.0"); // 同步数值显示
+                textView.setLineSpacing(textView.getLineSpacingExtra(), 1.0f);
+                updateTextMeasurements();
+            }
+        });
+
+        // 额外行间距启用/禁用
+        cbEnableExtraSpacing.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SeekBar sbExtraSpacing = findViewById(R.id.sbExtraLineSpacing);
+
+            // 启用/禁用控件
+            sbExtraSpacing.setEnabled(isChecked);
+
+            // 未启用时恢复默认值（0dp额外间距）
+            if (!isChecked) {
+                sbExtraSpacing.setProgress(0);
+                tvExtraSpacingValue.setText("0"); // 同步数值显示
+                textView.setLineSpacing(0, textView.getLineSpacingMultiplier());
+                updateTextMeasurements();
+            }
+        });
+
+        // ========== 文本输入实时同步 ==========
+        TextInputEditText inputEditText = findViewById(R.id.inputEditText);
+        inputEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+                textView.setText(s.toString());
+                updateTextMeasurements();
+            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        });
+
+        // ========== 字号调整监听器（仅SeekBar + 数值更新） ==========
         SeekBar sbTextSize = findViewById(R.id.sbTextSize);
         sbTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (progress < 8) progress = 8; // 最小字号限制
                 float newSize = progress;
-                tvTextSizeValue.setText(newSize + "sp");
                 textView.setTextSize(newSize); // 默认为sp单位
+                // 新增：更新字号数值显示
+                tvTextSizeValue.setText(String.valueOf((int) newSize));
                 updateTextMeasurements();
             }
 
@@ -92,25 +185,36 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // 字重控制监听器
-        RadioGroup rgFontWeight = findViewById(R.id.rgFontWeight);
-        rgFontWeight.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rbBold) {
-                textView.setTypeface(null, Typeface.BOLD);
-            } else {
-                textView.setTypeface(null, Typeface.NORMAL);
+        // ========== 字重控制监听器 ==========
+        Spinner fontWeightSpinner = findViewById(R.id.fontWeightSpinner);
+        fontWeightSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // 确保索引在数组范围内（0-3）
+                if (position >= 0 && position < fontWeights.length) {
+                    int selectedWeight = fontWeights[position];
+                    Typeface typeface = Typeface.create(null, selectedWeight, false);
+                    textView.setTypeface(typeface);
+                    updateTextMeasurements();
+                }
             }
-            updateTextMeasurements();
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        // 行高倍数控制监听器
+        // ========== 行高倍数控制监听器（仅SeekBar + 数值更新） ==========
         SeekBar sbLineHeight = findViewById(R.id.sbLineHeightMultiplier);
         sbLineHeight.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // 未启用时不处理
+                if (!cbEnableLineHeight.isChecked()) return;
+
                 float multiplier = progress / 10f; // 0.0-3.0倍
-                tvLineHeightValue.setText(String.format("%.1fx", multiplier));
                 textView.setLineSpacing(textView.getLineSpacingExtra(), multiplier);
+                // 新增：更新行间距倍数数值显示（保留1位小数）
+                tvLineMultiplierValue.setText(String.format("%.1f", multiplier));
                 updateTextMeasurements();
             }
 
@@ -121,15 +225,19 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // 额外行间距控制监听器
+        // ========== 额外行间距控制监听器（仅SeekBar + 数值更新） ==========
         SeekBar sbExtraSpacing = findViewById(R.id.sbExtraLineSpacing);
         sbExtraSpacing.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // 未启用时不处理
+                if (!cbEnableExtraSpacing.isChecked()) return;
+
                 float extraSpacingDp = progress;
                 float extraSpacingPx = extraSpacingDp * density; // 转换为px
-                tvExtraLineSpacingValue.setText(extraSpacingDp + "dp");
                 textView.setLineSpacing(extraSpacingPx, textView.getLineSpacingMultiplier());
+                // 新增：更新额外行间距数值显示
+                tvExtraSpacingValue.setText(String.valueOf((int) extraSpacingDp));
                 updateTextMeasurements();
             }
 
@@ -140,26 +248,21 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // includeFontPadding 控制监听器
+        // ========== includeFontPadding 控制监听器 ==========
         RadioGroup rgFontPadding = findViewById(R.id.rgFontPadding);
         rgFontPadding.setOnCheckedChangeListener((group, checkedId) -> {
-            isFontPaddingEnabled = checkedId == R.id.rbPaddingOn;
-            textView.setIncludeFontPadding(isFontPaddingEnabled);
+            if (checkedId == R.id.rbPaddingOn) {
+                isFontPaddingEnabled = true;
+                textView.setIncludeFontPadding(true);
+            } else {
+                isFontPaddingEnabled = false;
+                textView.setIncludeFontPadding(false);
+            }
             tvFontPaddingStatus.setText("字体内边距（includeFontPadding）：" + isFontPaddingEnabled);
             updateTextMeasurements();
         });
 
-        // 应用按钮点击事件 - 更新文本内容
-        Button btnApply = findViewById(R.id.btnApply);
-        btnApply.setOnClickListener(v -> {
-            String inputText = inputEditText.getText().toString().trim();
-            if (!inputText.isEmpty()) {
-                textView.setText(inputText);
-            }
-            updateTextMeasurements();
-        });
-
-        // 布局变化监听
+        // ========== 布局变化监听 ==========
         textView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             int heightPx = bottom - top;
             float heightDp = pxToDp(heightPx);

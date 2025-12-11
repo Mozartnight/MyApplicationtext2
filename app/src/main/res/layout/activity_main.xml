@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:paddingTop="16dp"
     tools:context=".MainActivity">
 
     <!-- 输入区域 -->
@@ -15,6 +15,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:background="@drawable/m3_surface_container"
+        android:padding="12dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        app:boxBackgroundColor="?attr/colorSurface"
+        app:hintTextColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,106 +30,99 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入文本内容"
+            app:hintEnabled="false"
             android:inputType="textMultiLine|textCapSentences"
-            android:lines="5"
-            android:minHeight="120dp"
-            android:padding="12dp"/>
+            android:padding="12dp"
+            android:textColor="?attr/colorOnSurface" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 红色分隔条1 -->
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="#ff0000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayout" />
 
     <!-- 文本展示区 -->
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:includeFontPadding="false"
-        android:text="Hello World!"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
 
-    <!-- 红色分隔条2 -->
-    <View
-        android:id="@+id/redBox2"
-        android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_marginBottom="24dp"
-        android:background="#ff0000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <!-- 控制区域 -->
+    <!-- 辅助色分隔条2 -->
     <LinearLayout
-        android:id="@+id/controlToggles"
+        android:id="@+id/textbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:orientation="vertical"
+        android:background="@drawable/m3_surface_container"
+        android:padding="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/redBox2">
+        app:layout_constraintTop_toBottomOf="@+id/inputLayout">
 
-        <!-- includeFontPadding 控制 -->
-        <RadioGroup
-            android:id="@+id/rgFontPadding"
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
+            android:includeFontPadding="false"
+            android:text="Hello World!"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
 
-            <RadioButton
-                android:id="@+id/rbPaddingOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="关闭字体内边距" />
-
-            <RadioButton
-                android:id="@+id/rbPaddingOn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="开启字体内边距" />
-        </RadioGroup>
     </LinearLayout>
+
+
+
+    <!-- includeFontPadding开关 -->
+    <RadioGroup
+        android:id="@+id/rgFontPadding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textbox">
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rbPaddingOn"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:text="启用内边距"
+            android:textColor="?attr/colorOnSurface" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rbPaddingOff"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:checked="true"
+            android:text="禁用内边距"
+            android:textColor="?attr/colorOnSurface" />
+    </RadioGroup>
 
     <!-- 滚动控制区 -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:paddingVertical="8dp"
         app:layout_constraintBottom_toTopOf="@+id/resultContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_max="300dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/controlToggles">
+        app:layout_constraintTop_toBottomOf="@+id/rgFontPadding">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="8dp">
+            android:paddingHorizontal="16dp">
 
-            <!-- 字号设置 -->
+            <!-- 字号设置（增加数值显示） -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginVertical="0dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -131,32 +130,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:minWidth="100dp"
-                    android:text="字号（sp）: "
+                    android:text="字号(SP):"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
+
+                <!-- 新增：字号数值显示 -->
+                <TextView
+                    android:id="@+id/tvTextSizeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="12"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
 
                 <SeekBar
                     android:id="@+id/sbTextSize"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:max="72"
-                    android:progress="12" />
-
-                <TextView
-                    android:id="@+id/tvTextSizeValue"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="12sp"
-                    android:textAlignment="center"/>
+                    android:progress="12"
+                    android:thumbTint="?attr/colorPrimary" />
             </LinearLayout>
 
             <!-- 字重设置 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginVertical="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -164,107 +168,110 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:minWidth="100dp"
                     android:text="字重: "
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
 
-                <RadioGroup
-                    android:id="@+id/rgFontWeight"
-                    android:layout_width="wrap_content"
+                <Spinner
+                    android:id="@+id/fontWeightSpinner"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/rbNormal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="常规" />
-
-                    <RadioButton
-                        android:id="@+id/rbBold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="加粗" />
-                </RadioGroup>
+                    android:entries="@array/font_weights"
+                    android:popupBackground="?attr/colorSurface"
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
-            <!-- 行高倍数设置 -->
+            <!-- 行间距倍数设置（增加数值显示） -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginVertical="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cbEnableLineHeight"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:checked="true"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:minWidth="100dp"
-                    android:text="行高倍数: "
+                    android:layout_marginEnd="8dp"
+                    android:text="行间距倍数:"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
+
+                <!-- 新增：行间距倍数数值显示 -->
+                <TextView
+                    android:id="@+id/tvLineMultiplierValue"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left   "
+                    android:text="1.0"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
 
                 <SeekBar
                     android:id="@+id/sbLineHeightMultiplier"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:max="30"
-                    android:progress="10" />
-
-                <TextView
-                    android:id="@+id/tvLineHeightValue"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="1.0x"
-                    android:textAlignment="center"/>
+                    android:progress="10"
+                    android:thumbTint="?attr/colorPrimary" />
             </LinearLayout>
 
-            <!-- 额外行间距设置 -->
+            <!-- 额外行间距设置（增加数值显示） -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginVertical="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingVertical="4dp">
 
+                <CheckBox
+                    android:id="@+id/cbEnableExtraSpacing"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:checked="true"
+                    android:textColor="?attr/colorOnSurface" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:minWidth="100dp"
-                    android:text="额外行间距（dp）: "
+                    android:layout_marginEnd="8dp"
+                    android:text="额外行间距:"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
+
+                <!-- 新增：额外行间距数值显示 -->
+                <TextView
+                    android:id="@+id/tvExtraSpacingValue"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="0"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
 
                 <SeekBar
                     android:id="@+id/sbExtraLineSpacing"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:max="50"
-                    android:progress="0" />
-
-                <TextView
-                    android:id="@+id/tvExtraLineSpacingValue"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="0dp"
-                    android:textAlignment="center"/>
+                    android:thumbTint="?attr/colorPrimary" />
             </LinearLayout>
-
-            <!-- 应用按钮 -->
-            <Button
-                android:id="@+id/btnApply"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_gravity="end"
-                android:minWidth="120dp"
-                android:text="应用设置"/>
         </LinearLayout>
     </ScrollView>
 
@@ -273,10 +280,12 @@
         android:id="@+id/resultContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f5f5f5"
-        android:elevation="2dp"
+        android:background="@drawable/m3_surface_container"
+        android:elevation="4dp"
         android:orientation="vertical"
         android:padding="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -287,6 +296,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:text="文本测量结果"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"/>
 
@@ -295,7 +305,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="当前字号（sp）："
+            android:text="当前字号（sp）：12"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -304,6 +315,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="测量高度（dp）："
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -312,6 +324,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="实际高度（dp）："
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -320,6 +333,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="总高度（含内边距，dp）："
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -328,6 +342,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="布局完成后高度（dp）："
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 
         <TextView
@@ -335,7 +350,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="字体内边距（includeFontPadding）：false"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

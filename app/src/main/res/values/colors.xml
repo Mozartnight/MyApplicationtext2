@@ -1,5 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 基础黑白色 -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- M3 深色主题核心色 -->
+    <color name="m3_primary">#BB86FC</color> <!-- 紫色主色 -->
+    <color name="m3_primary_variant">#3700B3</color> <!-- 主色变体（更深） -->
+    <color name="m3_on_primary">#000000</color> <!-- 主色上的文本（确保对比度） -->
+
+    <color name="m3_secondary">#03DAC6</color> <!-- 青色辅助色 -->
+    <color name="m3_secondary_variant">#018786</color> <!-- 辅助色变体 -->
+    <color name="m3_on_secondary">#000000</color> <!-- 辅助色上的文本 -->
+
+    <!-- 背景与容器色 -->
+    <color name="m3_background">#121212</color> <!-- 全局背景（深黑） -->
+    <color name="m3_on_background">#E0E0E0</color> <!-- 背景上的主要文本 -->
+
+    <color name="m3_surface">#1E1E1E</color> <!-- 卡片/容器背景 -->
+    <color name="m3_surface_variant">#333333</color> <!-- 次要容器背景（比surface稍亮） -->
+    <color name="m3_on_surface">#E0E0E0</color> <!-- 容器上的主要文本 -->
+    <color name="m3_on_surface_variant">#BBBBBB</color> <!-- 容器上的次要文本（比onSurface稍暗） -->
+
+    <!-- 错误色体系 -->
+    <color name="m3_error">#CF6679</color> <!-- 错误提示色 -->
+    <color name="m3_error_container">#B00020</color> <!-- 错误容器背景 -->
+    <color name="m3_on_error">#000000</color> <!-- 错误色上的文本 -->
+    <color name="m3_on_error_container">#FFFFFF</color> <!-- 错误容器内的文本 -->
+
+    <!-- 边框与分隔线 -->
+    <color name="m3_outline">#444444</color> <!-- 边框/分隔线颜色（适中对比度） -->
+    <color name="m3_outline_variant">#555555</color> <!-- 次要边框颜色 -->
+
+    <!-- 特殊场景色 -->
+    <color name="m3_scrim">#99000000</color> <!-- 遮罩层（半透明黑） -->
+    <color name="m3_inverse_surface">#FFFFFF</color> <!-- 反向表面（用于高亮容器） -->
+    <color name="m3_inverse_on_surface">#121212</color> <!-- 反向表面上的文本 -->
 </resources>
