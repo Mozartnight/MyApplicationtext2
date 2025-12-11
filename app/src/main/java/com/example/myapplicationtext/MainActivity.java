@@ -3,8 +3,12 @@ package com.example.myapplicationtext;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,15 +24,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvActualHeight;
     private TextView tvTotalHeight;
     private TextView tvLayoutHeight;
-    private TextView tvTextSizeValue;
-    private TextView tvLineHeightValue;
-    private TextView tvExtraLineSpacingValue;
-    // 新增：字体内边距状态展示控件
     private TextView tvFontPaddingStatus;
     private float density;
     private float scaledDensity;
-    // 记录 includeFontPadding 状态
     private boolean isFontPaddingEnabled = false;
+    // 字重数组（从资源文件加载）
+    private int[] fontWeights;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         density = getResources().getDisplayMetrics().density;
         scaledDensity = getResources().getDisplayMetrics().scaledDensity;
 
+        // 加载字重数组（长度为4，索引0-3）
+        fontWeights = getResources().getIntArray(R.array.font_weight_values);
+
         // 绑定控件
         bindViews();
 
@@ -58,16 +62,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
+        // 只绑定布局中实际存在的ID
         textView = findViewById(R.id.textView);
         tvTextSize = findViewById(R.id.tvTextSize);
         tvMeasuredHeight = findViewById(R.id.tvMeasuredHeight);
         tvActualHeight = findViewById(R.id.tvActualHeight);
         tvTotalHeight = findViewById(R.id.tvTotalHeight);
         tvLayoutHeight = findViewById(R.id.tvLayoutHeight);
-        tvTextSizeValue = findViewById(R.id.tvTextSizeValue);
-        tvLineHeightValue = findViewById(R.id.tvLineHeightValue);
-        tvExtraLineSpacingValue = findViewById(R.id.tvExtraLineSpacingValue);
-        // 绑定新增的字体内边距状态展示控件
         tvFontPaddingStatus = findViewById(R.id.tvFontPaddingStatus);
     }
 
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (progress < 8) progress = 8; // 最小字号限制
                 float newSize = progress;
-                tvTextSizeValue.setText(newSize + "sp");
                 textView.setTextSize(newSize); // 默认为sp单位
                 updateTextMeasurements();
             }
@@ -91,15 +91,23 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // 字重控制监听器
-        RadioGroup rgFontWeight = findViewById(R.id.rgFontWeight);
-        rgFontWeight.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.rbBold) {
-                textView.setTypeface(null, Typeface.BOLD);
-            } else {
-                textView.setTypeface(null, Typeface.NORMAL);
+        // 字重控制监听器（修正核心：使用Spinner选中位置作为索引）
+        Spinner fontWeightSpinner = findViewById(R.id.fontWeightSpinner);
+        fontWeightSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // 确保索引在数组范围内（0-3）
+                if (position >= 0 && position < fontWeights.length) {
+                    int selectedWeight = fontWeights[position];
+                    // 使用正确的方式设置字重（避免Typeface.style参数错误）
+                    Typeface typeface = Typeface.create(null, selectedWeight, false);
+                    textView.setTypeface(typeface);
+                    updateTextMeasurements();
+                }
             }
-            updateTextMeasurements();
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         // 行高倍数控制监听器
@@ -108,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float multiplier = progress / 10f; // 0.0-3.0倍
-                tvLineHeightValue.setText(String.format("%.1fx", multiplier));
                 textView.setLineSpacing(textView.getLineSpacingExtra(), multiplier);
                 updateTextMeasurements();
             }
@@ -120,14 +127,13 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // 额外行间距控制监听器
+        // 额外行间距距控制监听器
         SeekBar sbExtraSpacing = findViewById(R.id.sbExtraLineSpacing);
         sbExtraSpacing.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 float extraSpacingDp = progress;
                 float extraSpacingPx = extraSpacingDp * density; // 转换为px
-                tvExtraLineSpacingValue.setText(extraSpacingDp + "dp");
                 textView.setLineSpacing(extraSpacingPx, textView.getLineSpacingMultiplier());
                 updateTextMeasurements();
             }
@@ -139,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // 新增：includeFontPadding 控制监听器
+        // includeFontPadding 控制监听器
         RadioGroup rgFontPadding = findViewById(R.id.rgFontPadding);
         rgFontPadding.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.rbPaddingOn) {
@@ -149,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
                 isFontPaddingEnabled = false;
                 textView.setIncludeFontPadding(false);
             }
-            // 更新展示状态
             tvFontPaddingStatus.setText("字体内边距（includeFontPadding）：" + isFontPaddingEnabled);
             updateTextMeasurements();
         });
@@ -160,6 +165,45 @@ public class MainActivity extends AppCompatActivity {
             float heightDp = pxToDp(heightPx);
             tvLayoutHeight.setText("布局完成后高度（dp）：" + heightDp);
         });
+
+        // 应用按钮点击事件（处理输入框设置）
+        Button btnApply = findViewById(R.id.btnApply);
+        btnApply.setOnClickListener(v -> applyTextSettings());
+    }
+
+    // 处理输入框中的文本设置（字号、行高、额外行间距）
+    private void applyTextSettings() {
+        // 处理字号输入
+        EditText etTextSize = findViewById(R.id.etTextSize);
+        try {
+            float textSize = Float.parseFloat(etTextSize.getText().toString());
+            if (textSize >= 8) { // 最小限制
+                textView.setTextSize(textSize);
+            }
+        } catch (NumberFormatException e) {
+            // 输入无效时忽略
+        }
+
+        // 处理行高倍数输入
+        EditText etLineMultiplier = findViewById(R.id.etLineMultiplier);
+        try {
+            float multiplier = Float.parseFloat(etLineMultiplier.getText().toString());
+            textView.setLineSpacing(textView.getLineSpacingExtra(), multiplier);
+        } catch (NumberFormatException e) {
+            // 输入无效时忽略
+        }
+
+        // 处理额外行间距输入
+        EditText etExtraSpacing = findViewById(R.id.etExtraSpacing);
+        try {
+            float extraSpacingDp = Float.parseFloat(etExtraSpacing.getText().toString());
+            float extraSpacingPx = extraSpacingDp * density;
+            textView.setLineSpacing(extraSpacingPx, textView.getLineSpacingMultiplier());
+        } catch (NumberFormatException e) {
+            // 输入无效时忽略
+        }
+
+        updateTextMeasurements();
     }
 
     // 更新文本测量数据并展示
@@ -184,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
             tvMeasuredHeight.setText("测量高度（dp）：" + measuredHeightDp);
             tvActualHeight.setText("实际高度（dp）：" + actualHeightDp);
             tvTotalHeight.setText("总高度（含内边距，dp）：" + totalHeightDp);
-            // 确保 includeFontPadding 状态展示同步
             tvFontPaddingStatus.setText("字体内边距（includeFontPadding）：" + isFontPaddingEnabled);
         });
     }

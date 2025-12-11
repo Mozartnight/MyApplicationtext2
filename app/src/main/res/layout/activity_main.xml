@@ -66,28 +66,34 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <!-- includeFontPadding开关 -->
-    <LinearLayout
-        android:id="@+id/controlToggles"
+    <RadioGroup
+        android:id="@+id/rgFontPadding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/redBox2">
 
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:id="@+id/fontPaddingCheckBox"
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rbPaddingOn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="false"
-            android:padding="8dp"
-            android:text="启用includeFontPadding"
-            android:textSize="14sp"/>
-    </LinearLayout>
+            android:layout_marginEnd="16dp"
+            android:text="启用内边距" />
 
-    <!-- 滚动控制区 -->
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/rbPaddingOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="禁用内边距" />
+    </RadioGroup>
+
+    <!-- 滚动控制区（添加id解决约束问题） -->
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
@@ -96,7 +102,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_max="300dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/controlToggles">
+        app:layout_constraintTop_toBottomOf="@+id/rgFontPadding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -128,9 +134,18 @@
                     android:inputType="numberDecimal"
                     android:text="12"
                     android:textAlignment="center"/>
+
+                <SeekBar
+                    android:id="@+id/sbTextSize"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:max="72"
+                    android:progress="12"/>
             </LinearLayout>
 
-            <!-- 字重设置 -->
+            <!-- 字重设置（使用Spinner） -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -153,7 +168,7 @@
                     android:entries="@array/font_weights"/>
             </LinearLayout>
 
-            <!-- 行高设置 -->
+            <!-- 行间距倍数设置 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -166,27 +181,26 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:minWidth="100dp"
-                    android:text="行高（dp）: "
+                    android:text="行间距倍数: "
                     android:textSize="14sp"/>
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etLineHeight"
+                    android:id="@+id/etLineMultiplier"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:hint="40"
+                    android:hint="1.0"
                     android:inputType="numberDecimal"
-                    android:text="40"
+                    android:text="1.0"
                     android:textAlignment="center"/>
 
-                <androidx.appcompat.widget.AppCompatCheckBox
-                    android:id="@+id/switchLineHeight"
-                    android:layout_width="wrap_content"
+                <SeekBar
+                    android:id="@+id/sbLineHeightMultiplier"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:checked="true"
-                    android:padding="4dp"
-                    android:text="启用"
-                    android:textSize="14sp"/>
+                    android:layout_weight="1"
+                    android:max="30"
+                    android:progress="10"/>
             </LinearLayout>
 
             <!-- 额外行间距设置 -->
@@ -215,51 +229,13 @@
                     android:text="0"
                     android:textAlignment="center"/>
 
-                <androidx.appcompat.widget.AppCompatCheckBox
-                    android:id="@+id/switchExtraSpacing"
-                    android:layout_width="wrap_content"
+                <SeekBar
+                    android:id="@+id/sbExtraLineSpacing"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:checked="true"
-                    android:padding="4dp"
-                    android:text="启用"
-                    android:textSize="14sp"/>
-            </LinearLayout>
-
-            <!-- 行间距倍数设置 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:minWidth="100dp"
-                    android:text="行间距倍数: "
-                    android:textSize="14sp"/>
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etLineMultiplier"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:hint="1.0"
-                    android:inputType="numberDecimal"
-                    android:text="1.0"
-                    android:textAlignment="center"/>
-
-                <androidx.appcompat.widget.AppCompatCheckBox
-                    android:id="@+id/switchLineMultiplier"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:checked="true"
-                    android:padding="4dp"
-                    android:text="启用"
-                    android:textSize="14sp"/>
+                    android:layout_weight="1"
+                    android:max="50"/>
             </LinearLayout>
 
             <!-- 应用按钮 -->
@@ -336,10 +312,10 @@
             android:textSize="14sp"/>
 
         <TextView
-            android:id="@+id/tvIncludeFontPadding"
+            android:id="@+id/tvFontPaddingStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="includeFontPadding：false"
+            android:text="字体内边距（includeFontPadding）：false"
             android:textSize="14sp"/>
     </LinearLayout>
 
