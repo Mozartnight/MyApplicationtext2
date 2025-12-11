@@ -45,7 +45,6 @@
 
         <!-- 启用M3动态颜色与对比度增强 -->
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">true</item>
-        <item name="dynamicColor">true</item> <!-- 启用动态颜色（Android 12+） -->
     </style>
 
     <!-- 自定义文本样式（继承M3基础样式并微调） -->

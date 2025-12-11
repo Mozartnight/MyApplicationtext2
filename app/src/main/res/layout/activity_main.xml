@@ -6,8 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="?attr/colorBackground"
+    android:paddingTop="16dp"
     tools:context=".MainActivity">
 
     <!-- 输入区域 -->
@@ -17,7 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:background="@drawable/m3_surface_container"
-        android:padding="2dp"
+        android:padding="12dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
         app:boxBackgroundColor="?attr/colorSurface"
         app:hintTextColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toEndOf="parent"
@@ -29,52 +30,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入文本内容"
+            app:hintEnabled="false"
             android:inputType="textMultiLine|textCapSentences"
-            android:lines="5"
-            android:minHeight="120dp"
             android:padding="12dp"
             android:textColor="?attr/colorOnSurface" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- 主色分隔条1 -->
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:radius="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayout" />
 
     <!-- 文本展示区 -->
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/m3_surface_container"
-        android:padding="16dp"
-        android:includeFontPadding="false"
-        android:text="Hello World!"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <!-- 辅助色分隔条2 -->
-    <View
-        android:id="@+id/redBox2"
+    <LinearLayout
+        android:id="@+id/textbox"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="?attr/colorSecondary"
-        android:radius="8dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/m3_surface_container"
+        android:padding="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLayout">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="Hello World!"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    </LinearLayout>
+
+
 
     <!-- includeFontPadding开关 -->
     <RadioGroup
@@ -82,15 +75,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:layout_marginVertical="8dp"
+        android:layout_marginHorizontal="16dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/redBox2">
+        app:layout_constraintTop_toBottomOf="@+id/textbox">
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/rbPaddingOn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
             android:layout_marginEnd="16dp"
             android:text="启用内边距"
             android:textColor="?attr/colorOnSurface" />
@@ -98,7 +93,7 @@
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/rbPaddingOff"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
             android:checked="true"
             android:text="禁用内边距"
             android:textColor="?attr/colorOnSurface" />
@@ -109,7 +104,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:paddingVertical="8dp"
         app:layout_constraintBottom_toTopOf="@+id/resultContainer"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,13 +116,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="8dp">
+            android:paddingHorizontal="16dp">
 
-            <!-- 字号设置 -->
+            <!-- 字号设置（增加数值显示） -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginVertical="0dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -135,20 +130,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:minWidth="100dp"
-                    android:text="字号（sp）: "
+                    android:text="字号(SP):"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etTextSize"
-                    android:layout_width="80dp"
+                <!-- 新增：字号数值显示 -->
+                <TextView
+                    android:id="@+id/tvTextSizeValue"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="12"
-                    android:inputType="numberDecimal"
+                    android:gravity="center"
                     android:text="12"
-                    android:textAlignment="center"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
 
                 <SeekBar
                     android:id="@+id/sbTextSize"
@@ -165,7 +160,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginVertical="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -173,7 +168,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:minWidth="100dp"
                     android:text="字重: "
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
@@ -187,92 +181,97 @@
                     android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
-            <!-- 行间距倍数设置 -->
+            <!-- 行间距倍数设置（增加数值显示） -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginVertical="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cbEnableLineHeight"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:checked="true"
+                    android:textColor="?attr/colorOnSurface" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:minWidth="100dp"
-                    android:text="行间距倍数: "
+                    android:layout_marginEnd="8dp"
+                    android:text="行间距倍数:"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etLineMultiplier"
-                    android:layout_width="80dp"
+                <!-- 新增：行间距倍数数值显示 -->
+                <TextView
+                    android:id="@+id/tvLineMultiplierValue"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
-                    android:hint="1.0"
-                    android:inputType="numberDecimal"
+                    android:gravity="left   "
                     android:text="1.0"
-                    android:textAlignment="center"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
 
                 <SeekBar
                     android:id="@+id/sbLineHeightMultiplier"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:max="30"
                     android:progress="10"
                     android:thumbTint="?attr/colorPrimary" />
             </LinearLayout>
 
-            <!-- 额外行间距设置 -->
+            <!-- 额外行间距设置（增加数值显示） -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginVertical="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingVertical="4dp">
 
+                <CheckBox
+                    android:id="@+id/cbEnableExtraSpacing"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:checked="true"
+                    android:textColor="?attr/colorOnSurface" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:minWidth="100dp"
-                    android:text="额外行间距（dp）: "
+                    android:layout_marginEnd="8dp"
+                    android:text="额外行间距:"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etExtraSpacing"
-                    android:layout_width="80dp"
+                <!-- 新增：额外行间距数值显示 -->
+                <TextView
+                    android:id="@+id/tvExtraSpacingValue"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
-                    android:hint="0"
-                    android:inputType="numberDecimal"
+                    android:gravity="left"
                     android:text="0"
-                    android:textAlignment="center"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
 
                 <SeekBar
                     android:id="@+id/sbExtraLineSpacing"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:max="50"
                     android:thumbTint="?attr/colorPrimary" />
             </LinearLayout>
-
-            <!-- 应用按钮 -->
-            <Button
-                android:id="@+id/btnApply"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_gravity="end"
-                android:minWidth="120dp"
-                android:text="应用设置"
-                android:textColor="?attr/colorOnPrimary"
-                android:backgroundTint="?attr/colorPrimary" />
         </LinearLayout>
     </ScrollView>
 
@@ -285,6 +284,8 @@
         android:elevation="4dp"
         android:orientation="vertical"
         android:padding="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -304,7 +305,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="当前字号（sp）："
+            android:text="当前字号（sp）：12"
             android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"/>
 

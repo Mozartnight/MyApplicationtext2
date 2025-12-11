@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.MyApplicationText" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="Base.Theme.MyApplicationText" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- 与夜间模式保持一致，强制全局黑色调 -->
-        <item name="colorPrimary">@color/m3_primary</item>
+>        <item name="colorPrimary">@color/m3_primary</item>
         <item name="colorPrimaryVariant">@color/m3_primary_variant</item>
         <item name="colorSecondary">@color/m3_secondary</item>
         <item name="android:colorBackground">@color/m3_background</item>
@@ -35,6 +35,7 @@
 
         <!-- 按钮样式默认配置 -->
         <item name="materialButtonStyle">@style/Widget.Material3.Button</item>
+
     </style>
 
     <style name="Theme.MyApplicationText" parent="Base.Theme.MyApplicationText" />
