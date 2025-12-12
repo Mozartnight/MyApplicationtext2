@@ -3,26 +3,26 @@
     <!-- 移除原字重相关数组，添加字体数组 -->
     <string-array name="font_names">
         <item>默认字体</item>
-        <item>Roboto Black</item>
-        <item>Roboto Bold</item>
-        <item>Roboto ExtraBold</item>
-        <item>Roboto ExtraLight</item>
-        <item>Roboto Light</item>
-        <item>Roboto Medium</item>
         <item>Roboto Regular</item>
+        <item>Roboto Medium</item>
         <item>Roboto SemiBold</item>
-        <item>Roboto Thin</item>
+        <item>Roboto Bold</item>
+        <!-- 新增的字体名称 -->
+        <item>思源黑体 Regular</item>
+        <item>思源黑体 Medium</item>
+        <item>思源黑体 Bold</item>
+        <item>思源黑体 Heavy</item>
     </string-array>
     <string-array name="font_files">
         <item></item><!-- 对应默认字体 -->
-        <item>roboto_black.ttf</item>
-        <item>roboto_bold.ttf</item>
-        <item>roboto_extrabold.ttf</item>
-        <item>roboto_extralight.ttf</item>
-        <item>roboto_light.ttf</item>
-        <item>roboto_medium.ttf</item>
         <item>roboto_regular.ttf</item>
+        <item>roboto_medium.ttf</item>
         <item>roboto_semibold.ttf</item>
-        <item>roboto_thin.ttf</item>
+        <item>roboto_bold.ttf</item>
+        <!-- 新增的字体文件（与名称顺序对应） -->
+        <item>syht_regular.otf</item>
+        <item>syht_medium.otf</item>
+        <item>syht_bold.otf</item>
+        <item>syht_heavy.otf</item>
     </string-array>
 </resources>
