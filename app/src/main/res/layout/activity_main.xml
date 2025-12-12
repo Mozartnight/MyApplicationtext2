@@ -165,16 +165,17 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginEnd="16dp"
                     android:text="字体: "
-                    android:textSize="14sp"/>
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurface"/>
 
                 <Spinner
                     android:id="@+id/fontSpinner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/font_names"/>
+                    android:layout_height="match_parent"
+                    android:entries="@array/font_names" />
             </LinearLayout>
 
             <!-- 行间距倍数设置（增加数值显示） -->

@@ -1,5 +1,6 @@
 package com.example.myapplicationtext;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -74,17 +77,52 @@ public class MainActivity extends AppCompatActivity {
         // 初始化数值显示
         initValueDisplay();
 
-        // 初始化监听器
+        // 初始化Spinner样式（优化下拉列表显示）
+        initFontSpinnerStyle();
+
+        // 初始化监听器（包含字号调节修复）
         initListeners();
 
         // 初始测量展示
         updateTextMeasurements();
     }
 
+    // 初始化Spinner下拉列表样式（解决字体选择列表看不清问题）
+    private void initFontSpinnerStyle() {
+        Spinner fontSpinner = findViewById(R.id.fontSpinner);
+        // 自定义适配器，强制设置下拉项文本样式
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+                this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.font_names)
+        ) {
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                TextView view = (TextView) super.getDropDownView(position, convertView, parent);
+                // 高对比度样式：白色文字+深色背景
+                view.setTextColor(Color.WHITE);
+                view.setTextSize(16);
+                view.setPadding(16, 16, 16, 16);
+                view.setBackgroundColor(getResources().getColor(R.color.m3_surface));
+                return view;
+            }
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView view = (TextView) super.getView(position, convertView, parent);
+                view.setTextColor(getResources().getColor(R.color.m3_on_surface));
+                view.setTextSize(14);
+                return view;
+            }
+        };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fontSpinner.setAdapter(adapter);
+    }
+
     private void bindViews() {
         // 核心展示控件
         textView = findViewById(R.id.textView);
-        Log.d("ViewDebug", "textView是否为空：" + (textView == null)); // 若为true，说明ID错了
+        Log.d("ViewDebug", "textView是否为空：" + (textView == null));
         tvTextSize = findViewById(R.id.tvTextSize);
         tvMeasuredHeight = findViewById(R.id.tvMeasuredHeight);
         tvActualHeight = findViewById(R.id.tvActualHeight);
@@ -150,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 textView.setText(s.toString());
-                // 输入文本后强制刷新字体显示
                 textView.invalidate();
                 updateTextMeasurements();
             }
@@ -158,16 +195,24 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
-        // 字号调整监听器
+        // 字号调整监听器（修复字号不生效问题）
         SeekBar sbTextSize = findViewById(R.id.sbTextSize);
         sbTextSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (progress < 8) progress = 8;
-                float newSize = progress;
+                if (progress < 8) progress = 8; // 最小字号限制
+                final float newSize = progress;
+                // 保存当前字体，避免设置字号时字体被重置
+                Typeface currentTypeface = textView.getTypeface();
+                // 强制设置字号并刷新
                 textView.setTextSize(newSize);
+                textView.setTypeface(currentTypeface); // 恢复字体
                 tvTextSizeValue.setText(String.valueOf((int) newSize));
-                updateTextMeasurements();
+                // 延迟刷新确保生效
+                textView.post(() -> {
+                    textView.invalidate();
+                    updateTextMeasurements();
+                });
             }
 
             @Override
@@ -177,9 +222,8 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        // 字体选择监听器（核心修复：简化逻辑+解决变量未定义+强制刷新）
+        // 字体选择监听器
         Spinner fontSpinner = findViewById(R.id.fontSpinner);
-        // 手动触发初始选择（确保监听执行）
         fontSpinner.setSelection(0, true);
         fontSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -192,34 +236,25 @@ public class MainActivity extends AppCompatActivity {
                 String fontFile = fontFiles[position];
                 Typeface typeface = Typeface.DEFAULT;
 
-                // 打印日志，确认选中的位置和文件名
                 Log.d("FontDebug", "选中位置：" + position + "，字体文件：" + fontFile);
 
-                // 非默认字体时加载自定义字体（合并重复逻辑）
                 if (fontFile != null && !fontFile.isEmpty()) {
                     try {
-                        // 优先使用assets加载（兼容所有版本）
                         String fontPath = "font/" + fontFile;
-                        // Android 8.0+ 兼容处理
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            // 尝试从res/font目录加载（备选方案）
                             String fontName = fontFile.substring(0, fontFile.lastIndexOf('.'));
                             int fontResId = getResources().getIdentifier(fontName, "font", getPackageName());
                             if (fontResId != 0) {
                                 typeface = getResources().getFont(fontResId);
                                 Log.d("FontDebug", "从res/font加载成功：" + fontName);
                             } else {
-                                // res/font不存在则从assets加载
                                 typeface = Typeface.createFromAsset(getAssets(), fontPath);
                                 Log.d("FontDebug", "从assets加载成功：" + fontPath);
                             }
                         } else {
-                            // 低版本直接从assets加载
                             typeface = Typeface.createFromAsset(getAssets(), fontPath);
                             Log.d("FontDebug", "低版本从assets加载成功：" + fontPath);
                         }
-
-                        // 强制清除字体缓存
                         typeface = Typeface.create(typeface, Typeface.NORMAL);
 
                     } catch (Exception e) {
@@ -230,14 +265,14 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("FontDebug", "使用系统默认字体");
                 }
 
-                // 核心修复：设置字体+强制刷新（多维度确保生效）
+                // 保存当前字号，避免切换字体时字号被重置
+                float currentTextSize = textView.getTextSize() / scaledDensity;
                 textView.setTypeface(typeface);
-                textView.setText(textView.getText()); // 强制重新设置文本内容
-                textView.invalidate(); // 强制重绘控件
-                textView.requestLayout(); // 强制重新布局
+                textView.setTextSize(currentTextSize); // 恢复字号
+                // 强制刷新
                 textView.post(() -> {
-                    // 延迟刷新确保生效
                     textView.invalidate();
+                    textView.requestLayout();
                     updateTextMeasurements();
                 });
 
@@ -297,7 +332,6 @@ public class MainActivity extends AppCompatActivity {
             isFontPaddingEnabled = checkedId == R.id.rbPaddingOn;
             textView.setIncludeFontPadding(isFontPaddingEnabled);
             tvFontPaddingStatus.setText("字体内边距（includeFontPadding）：" + isFontPaddingEnabled);
-            // 切换内边距后强制刷新
             textView.invalidate();
             updateTextMeasurements();
         });
@@ -310,7 +344,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // 更新文本测量数据并展示（优化格式）
+    // 更新文本测量数据并展示
     private void updateTextMeasurements() {
         textView.post(() -> {
             int measuredHeightPx = textView.getMeasuredHeight();
@@ -325,7 +359,6 @@ public class MainActivity extends AppCompatActivity {
             float textSizePx = textView.getTextSize();
             float textSizeSp = pxToSp(textSizePx);
 
-            // 保留两位小数显示
             tvTextSize.setText(String.format("当前字号（sp）：%.2f", textSizeSp));
             tvMeasuredHeight.setText(String.format("测量高度（dp）：%.2f", measuredHeightDp));
             tvActualHeight.setText(String.format("实际高度（dp）：%.2f", actualHeightDp));
