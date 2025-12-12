@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="font_weights">
-        <item>常规 (400)</item>
-        <item>中等 (500)</item>
-        <item>加粗 (700)</item>
-        <item>特粗 (900)</item>
+    <!-- 移除原字重相关数组，添加字体数组 -->
+    <string-array name="font_names">
+        <item>默认字体</item>
+        <item>Roboto Black</item>
+        <item>Roboto Bold</item>
+        <item>Roboto ExtraBold</item>
+        <item>Roboto ExtraLight</item>
+        <item>Roboto Light</item>
+        <item>Roboto Medium</item>
+        <item>Roboto Regular</item>
+        <item>Roboto SemiBold</item>
+        <item>Roboto Thin</item>
     </string-array>
-    <integer-array name="font_weight_values">
-        <item>400</item>
-        <item>500</item>
-        <item>700</item>
-        <item>900</item>
-    </integer-array>
+    <string-array name="font_files">
+        <item></item><!-- 对应默认字体 -->
+        <item>roboto_black.ttf</item>
+        <item>roboto_bold.ttf</item>
+        <item>roboto_extrabold.ttf</item>
+        <item>roboto_extralight.ttf</item>
+        <item>roboto_light.ttf</item>
+        <item>roboto_medium.ttf</item>
+        <item>roboto_regular.ttf</item>
+        <item>roboto_semibold.ttf</item>
+        <item>roboto_thin.ttf</item>
+    </string-array>
 </resources>

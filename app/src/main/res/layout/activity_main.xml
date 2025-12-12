@@ -51,7 +51,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/inputLayout">
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
@@ -156,7 +155,7 @@
                     android:thumbTint="?attr/colorPrimary" />
             </LinearLayout>
 
-            <!-- 字重设置 -->
+            <!-- 字重设置修改为字体设置 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -168,17 +167,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:text="字重: "
-                    android:textColor="?attr/colorOnSurface"
+                    android:text="字体: "
                     android:textSize="14sp"/>
 
                 <Spinner
-                    android:id="@+id/fontWeightSpinner"
-                    android:layout_width="120dp"
+                    android:id="@+id/fontSpinner"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/font_weights"
-                    android:popupBackground="?attr/colorSurface"
-                    android:textColor="?attr/colorOnSurface" />
+                    android:entries="@array/font_names"/>
             </LinearLayout>
 
             <!-- 行间距倍数设置（增加数值显示） -->
